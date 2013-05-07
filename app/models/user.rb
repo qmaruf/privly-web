@@ -4,12 +4,13 @@
 class User < ActiveRecord::Base
   
   has_many :posts, :dependent => :destroy
+  has_many :authentications, :dependent => :destroy
   
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable,
-         :recoverable, :rememberable, :trackable, 
-         :validatable, :token_authenticatable, 
+  devise :invitable, :database_authenticatable, :omniauthable,
+         :recoverable, :rememberable, :trackable,
+         :validatable, :token_authenticatable,
          :confirmable, :lockable, :timeoutable, :validate_on_invite => true
   
   before_create :process_email
@@ -46,6 +47,18 @@ class User < ActiveRecord::Base
   #https://github.com/scambra/devise_invitable/wiki/Disabling-devise-recoverable,-if-invitation-was-not-accepted
   def send_reset_password_instructions
     super if invitation_token.nil?
+  end
+
+  def apply_omniauth(omniauth, confirmable)
+    authentications.build(
+        :provider => omniauth['provider'],
+        :uid      => omniauth['uid']
+    #      :token    => omniauth['credentials']['token'],
+    #  :secret   => omniauth['credentials']['secret']
+    )
+    if (!confirmable)
+      self.confirmed_at, self.confirmation_sent_at = Time.now
+    end
   end
   
 end

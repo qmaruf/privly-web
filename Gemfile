@@ -5,6 +5,9 @@ gem 'rails', '3.1.12'
 gem 'json'
 gem 'jquery-rails', '>= 2.1.3'
 
+
+gem "nifty-generators", :group => :development
+
 # Database gem
 gem 'mysql2' # Comment out this line to use another Database type
 # gem 'sqlite3-ruby'
@@ -51,3 +54,11 @@ gem 'fastercsv'
 
 # Error reporting service
 gem "airbrake"
+
+#add provider
+gem 'devise'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'twitter'
+gem 'fb_graph'
+gem "mocha", :group => :test

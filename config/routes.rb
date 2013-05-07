@@ -1,9 +1,11 @@
 Privly::Application.routes.draw do
   
+  resources :authentications
+
   # Active Admin
   ActiveAdmin.routes(self)
   devise_for :admin_users, ActiveAdmin::Devise.config
-  
+
   # Deprecated Zero-Bin specific storage endpoint
   match "/zero_bin/:id" => "zero_bins#show", :as => :show_zero_bins, :via => [:get]
   match "/zero_bin" => "zero_bins#create", :via => [:post]
@@ -18,8 +20,9 @@ Privly::Application.routes.draw do
   match 'token_authentications' => 'token_authentications#destroy', :as => :destroy_token_authentications, :via => [:delete]
   
   # User authentication
-  devise_for :users, :controllers => { :invitations => 'users/invitations' }
-  
+  devise_for :users, :controllers => { :invitations => 'users/invitations', omniauth_callbacks: "authentications", registrations: "registrations" }
+
+
   # Invitations and mailers
   devise_scope :user do
     post "users/invitations/send_invitation" => "users/invitations#send_invitation", :as => :user_send_invitations
