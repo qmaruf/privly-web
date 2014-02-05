@@ -1,0 +1,2 @@
+rvm use 1.9.3-p484
+rvm gemset use privly-web
