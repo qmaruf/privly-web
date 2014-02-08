@@ -48,4 +48,6 @@ gem 'useragent'
 gem "airbrake"
 
 # Payment
-gem 'activemerchant'
+group :payment do
+  gem 'activemerchant'
+end
